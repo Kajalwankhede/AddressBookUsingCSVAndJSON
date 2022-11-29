@@ -1,5 +1,6 @@
 package com.addressbook;
 
+import com.google.gson.Gson;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
@@ -11,11 +12,9 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AddressBookDetails {
@@ -23,6 +22,7 @@ public class AddressBookDetails {
     public static List<AddressBook> list = new ArrayList<AddressBook>();
 
     private static final String csvFile ="AddressBookCSVData.csv";
+    private static final String jsonFile ="AddressBookCSVData.json";
     public void writeData() {
         StringBuffer empBuffer = new StringBuffer();
         list.forEach(employee -> {
@@ -72,6 +72,37 @@ public class AddressBookDetails {
             }
         }
     }
+    public void writeDataInJSon() throws IOException {
+        {
+            Path filePath = Paths.get(jsonFile);
+            Gson gson = new Gson();
+            String json = gson.toJson(list);
+            FileWriter writer = new FileWriter(String.valueOf(filePath));
+            writer.write(json);
+            writer.close();
+        }
+    }
+
+    public void readDataFromJson() throws IOException {
+        ArrayList<AddressBook> contactList = null;
+        Path filePath = Paths.get(jsonFile);
+        try (Reader reader = Files.newBufferedReader(filePath);) {
+            Gson gson = new Gson();
+            list = new ArrayList<AddressBook>(Arrays.asList(gson.fromJson(reader, AddressBook[].class)));
+            for (AddressBook data : list) {
+                System.out.println("Firstname : " + data.getfirstName());
+                System.out.println("Lastname : " + data.getlastName());
+                System.out.println("Address : " + data.getAddress());
+                System.out.println("City : " + data.getcity());
+                System.out.println("State : " + data.getState());
+                System.out.println("Zip : " + data.getZip());
+                System.out.println("Phone number : " + data.getPhoneNumber());
+                System.out.println("Email : " + data.getEmail());
+
+            }
+        }
+    }
+
 
 
     public void addDetails() {

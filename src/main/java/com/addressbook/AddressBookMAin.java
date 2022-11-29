@@ -31,7 +31,9 @@ public class AddressBookMAin {
                 System.out.println("9.Write to text file");
                 System.out.println("10.Write to CSV");
                 System.out.println("11.Read to CSV");
-                System.out.println("12.Exit");
+                System.out.println("12.Write Data in Json");
+                System.out.println("13.Write Data in Json");
+                System.out.println("14.Exit");
                 System.out.println("Enter Choice: ");
                 System.out.println("--------------------------------------------------------");
                 int option = sc.nextInt();
@@ -119,8 +121,24 @@ public class AddressBookMAin {
                     catch (IOException  e){
                 System.out.println(e);
             }
-
                     case 12:
+
+                    try {
+                        addressBook.writeDataInJSon();
+                    }catch (IOException e){
+                        System.out.println(e);
+                    }
+                    break;
+                    case 13:
+                        try {
+                            addressBook.readDataFromJson();
+                        }catch (IOException e){
+                            System.out.println(e);
+                        }
+                        break;
+
+
+                    case 14:
                         flag = false;
                         break;
 
